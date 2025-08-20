@@ -1,4 +1,4 @@
-import { View, Text, Image, TextInput } from "react-native";
+import { View, Image, TextInput, Pressable } from "react-native";
 import React from "react";
 import { icons } from "@/constants/icons";
 
@@ -8,8 +8,19 @@ interface Props {
 }
 
 const SearchBar: React.FC<Props> = ({ placeholder, onPress }) => {     //Code to be reconsidered
+  const [query, setQuery] = React.useState("");
+  const inputRef = React.useRef<TextInput>(null);
   return (
-    <View className="flex-row items-center bg-dark-200 rounded-full px-5 py-4">
+    <Pressable
+      className="flex-row items-center bg-dark-200 rounded-full px-5 py-4"
+      onPress={() => {
+        if (onPress) {
+          onPress();
+        } else {
+          inputRef.current?.focus();
+        }
+      }}
+    >
       <Image
         source={icons.search}
         className="w-5 h-5"
@@ -17,14 +28,15 @@ const SearchBar: React.FC<Props> = ({ placeholder, onPress }) => {     //Code to
         style={{ tintColor: "#ab8bff" }}
       />
       <TextInput
-        onPress={onPress}
+        ref={inputRef}
         placeholder={placeholder}
         placeholderTextColor="#a8b5db"
-        value=""
-        onChangeText={() => {}}
+        value={query}
+        onChangeText={setQuery}
         className="flex-1 ml-2 text-white"
+        returnKeyType="search"
       />
-    </View>
+    </Pressable>
   );
 };
 
