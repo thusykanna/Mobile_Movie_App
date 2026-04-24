@@ -2,6 +2,7 @@ import { View, Text, Image, FlatList } from 'react-native'
 import React, { useState, useCallback } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useFocusEffect } from 'expo-router'
+import { Feather } from '@expo/vector-icons'
 import { images } from '@/constants/images'
 import { icons } from '@/constants/icons'
 import MovieCard from '@/components/MovieCard'
@@ -30,15 +31,15 @@ const Saved = () => {
         contentContainerStyle={{ paddingBottom: 100 }}
         ListHeaderComponent={
           <View className="w-full px-5 mt-20 mb-5">
-            <Image source={icons.logo} className="w-12 h-10 mx-auto mb-5" />
+            <Image source={icons.logo} className="w-20 h-20 mx-auto mb-5" />
             <Text className="text-white text-xl font-bold">Saved Movies</Text>
           </View>
         }
         ListEmptyComponent={
           <View className="flex-1 justify-center items-center mt-20 px-5">
-            <Image source={icons.save} className="w-12 h-12 mb-4 opacity-40" resizeMode="contain" style={{ tintColor: '#A8B5DB' }} />
-            <Text className="text-light-200 text-center text-base">No saved movies yet.</Text>
-            <Text className="text-light-300 text-center text-sm mt-1">Tap the save icon on any movie to add it here.</Text>
+            <Feather name="bookmark" size={48} color="#A8B5DB" style={{ opacity: 0.4 }} />
+            <Text className="text-light-200 text-center text-base mt-4">No saved movies yet.</Text>
+            <Text className="text-light-300 text-center text-sm mt-1">Tap the bookmark icon on any movie to add it here.</Text>
           </View>
         }
         renderItem={({ item }) => (

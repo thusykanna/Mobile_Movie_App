@@ -2,10 +2,9 @@ import { View, Text, Image, ScrollView, TouchableOpacity, ActivityIndicator } fr
 import React, { useEffect, useState } from 'react'
 import { useLocalSearchParams, router } from 'expo-router'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { Feather } from '@expo/vector-icons'
 import useFetch from '@/services/useFetch'
 import { fetchMovieDetails } from '@/services/api'
-import { icons } from '@/constants/icons'
-import { images } from '@/constants/images'
 
 const SAVED_KEY = 'savedMovies'
 
@@ -73,7 +72,7 @@ const MovieDetailsScreen = () => {
           onPress={() => router.back()}
           className="absolute top-14 left-5 p-2 rounded-full bg-dark-100"
         >
-          <Image source={icons.arrow} className="w-5 h-5" resizeMode="contain" style={{ tintColor: '#fff' }} />
+          <Feather name="arrow-left" size={22} color="#fff" />
         </TouchableOpacity>
 
         {/* Save button */}
@@ -81,12 +80,7 @@ const MovieDetailsScreen = () => {
           onPress={toggleSave}
           className="absolute top-14 right-5 p-2 rounded-full bg-dark-100"
         >
-          <Image
-            source={icons.save}
-            className="w-5 h-5"
-            resizeMode="contain"
-            style={{ tintColor: isSaved ? '#AB8BFF' : '#A8B5DB' }}
-          />
+          <Feather name="bookmark" size={22} color={isSaved ? '#AB8BFF' : '#A8B5DB'} />
         </TouchableOpacity>
 
         <View className="px-5 pt-5">
@@ -103,7 +97,7 @@ const MovieDetailsScreen = () => {
           </View>
 
           <View className="flex-row items-center mt-2">
-            <Image source={icons.star} className="w-4 h-4" resizeMode="contain" />
+            <Feather name="star" size={14} color="#FFD700" />
             <Text className="text-white font-bold ml-1">{(movie.vote_average / 2).toFixed(1)}/5</Text>
             <Text className="text-light-300 text-sm ml-2">({movie.vote_count.toLocaleString()} votes)</Text>
           </View>

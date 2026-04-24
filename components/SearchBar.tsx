@@ -1,6 +1,6 @@
-import { View, Image, TextInput, Pressable } from "react-native";
+import { TextInput, Pressable } from "react-native";
 import React from "react";
-import { icons } from "@/constants/icons";
+import { Feather } from "@expo/vector-icons";
 
 interface Props {
   placeholder?: string;
@@ -23,12 +23,7 @@ const SearchBar: React.FC<Props> = ({ placeholder, onPress, value, onChangeText,
         }
       }}
     >
-      <Image
-        source={icons.search}
-        className="w-5 h-5"
-        resizeMode="contain"
-        style={{ tintColor: "#ab8bff" }}
-      />
+      <Feather name="search" size={20} color="#ab8bff" />
       <TextInput
         ref={inputRef}
         placeholder={placeholder}

@@ -1,8 +1,8 @@
-import { View, Text, ImageBackground, Image } from 'react-native'
+import { View, Text, ImageBackground } from 'react-native'
 import React from 'react'
 import { Tabs } from 'expo-router'
+import { Feather } from '@expo/vector-icons'
 import { images } from '@/constants/images'
-import { icons } from '@/constants/icons'
 
 const tabBarStyle = {
   backgroundColor: '#0f0D23',
@@ -11,7 +11,6 @@ const tabBarStyle = {
   marginBottom: 36,
   height: 52,
   position: 'absolute' as const,
-  overflow: 'hidden' as const,
   borderWidth: 1,
   borderColor: '#0f0d23',
 }
@@ -23,25 +22,53 @@ const tabBarItemStyle = {
   alignItems: 'center' as const,
 }
 
-const TabIcon = ({ focused, icon, title }: any) => {
+const TabIcon = ({
+  focused,
+  iconName,
+  title,
+}: {
+  focused: boolean
+  iconName: React.ComponentProps<typeof Feather>['name']
+  title: string
+}) => {
   if (focused) {
     return (
       <ImageBackground
         source={images.highlight}
-        className='flex flex-row w-full flex-1 min-w-[112px] min-h-16 mt-4 justify-center items-center rounded-full overflow-hidden'
+        style={{
+          flexDirection: 'row',
+          flex: 1,
+          minWidth: 112,
+          minHeight: 52,
+          marginTop: 14,
+          justifyContent: 'center',
+          alignItems: 'center',
+          borderRadius: 50,
+          overflow: 'hidden',
+          paddingHorizontal: 16,
+        }}
       >
-        <Image source={icon} tintColor="#151312" className="size-5" />
-        <Text className='text-secondary text-base font-semibold ml-2'>{title}</Text>
+        <Feather name={iconName} size={20} color="#151312" />
+        <Text style={{ color: '#151312', fontSize: 14, fontWeight: '600', marginLeft: 8 }}>
+          {title}
+        </Text>
       </ImageBackground>
     )
-  } else {
-    return (
-      <View className='flex flex-row w-full flex-1 min-w-[112px] min-h-16 mt-4 px-14 justify-center items-center rounded-full overflow-hidden'>
-        <Image source={icon} tintColor="#A8B5Db" className="size-5" />
-        <Text className='text-secondary text-base font-semibold ml-2'>{title}</Text>
-      </View>
-    )
   }
+
+  return (
+    <View
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: 52,
+        marginTop: 14,
+      }}
+    >
+      <Feather name={iconName} size={20} color="#A8B5DB" />
+    </View>
+  )
 }
 
 const _layout = () => {
@@ -53,11 +80,11 @@ const _layout = () => {
           tabBarShowLabel: false,
           tabBarItemStyle,
           tabBarStyle,
-          title: "Home",
+          title: 'Home',
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={icons.home} title="Home" />
-          )
+            <TabIcon focused={focused} iconName="home" title="Home" />
+          ),
         }}
       />
       <Tabs.Screen
@@ -66,11 +93,11 @@ const _layout = () => {
           tabBarShowLabel: false,
           tabBarItemStyle,
           tabBarStyle,
-          title: "Search",
+          title: 'Search',
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={icons.search} title="Search" />
-          )
+            <TabIcon focused={focused} iconName="search" title="Search" />
+          ),
         }}
       />
       <Tabs.Screen
@@ -79,11 +106,11 @@ const _layout = () => {
           tabBarShowLabel: false,
           tabBarItemStyle,
           tabBarStyle,
-          title: "Saved",
+          title: 'Saved',
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={icons.save} title="Saved" />
-          )
+            <TabIcon focused={focused} iconName="bookmark" title="Saved" />
+          ),
         }}
       />
       <Tabs.Screen
@@ -92,11 +119,11 @@ const _layout = () => {
           tabBarShowLabel: false,
           tabBarItemStyle,
           tabBarStyle,
-          title: "Profile",
+          title: 'Profile',
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={icons.person} title="Profile" />
-          )
+            <TabIcon focused={focused} iconName="user" title="Profile" />
+          ),
         }}
       />
     </Tabs>

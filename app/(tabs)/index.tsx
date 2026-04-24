@@ -25,7 +25,7 @@ export default function Index() {
     <View className="flex-1 bg-primary">
       <Image source={images.bg} className="absolute w-full z-0" />
       <ScrollView className="flex-1 px-5" showsVerticalScrollIndicator={false} contentContainerStyle={{ minHeight: "100%", paddingBottom: 10 }}>
-        <Image source={icons.logo} className="w-12 h-10 mt-20 mb-5 mx-auto" />
+        <Image source={icons.logo} className="w-20 h-20 mt-20 mb-5 mx-auto" />
 
         <SearchBar
           placeholder="Search movies..."
@@ -35,7 +35,7 @@ export default function Index() {
         {/* Trending Section */}
         {!trendingError && (
           <View className="mt-8">
-            <Text className="text-lg text-white font-bold mb-3">Trending This Week</Text>
+            <Text className="text-lg text-white font-bold mb-3">Trending Movies</Text>
             {trendingLoading ? (
               <ActivityIndicator size="small" color="#AB8BFF" />
             ) : (
@@ -45,7 +45,7 @@ export default function Index() {
                 keyExtractor={item => item.id.toString()}
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                scrollEnabled
+                contentContainerStyle={{ paddingBottom: 10, paddingLeft: 4 }}
               />
             )}
           </View>

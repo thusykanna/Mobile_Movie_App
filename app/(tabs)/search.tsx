@@ -3,77 +3,74 @@ import React, { useState } from "react";
 import { images } from "@/constants/images";
 import MovieCard from "@/components/MovieCard";
 import { fetchPopularMovies } from "@/services/api";
-import useFetch from "@/services/useFetch";
 import { icons } from "@/constants/icons";
 import SearchBar from "@/components/SearchBar";
 
-const search = () => {
+const Search = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const {
-    data: movies,
-    loading: moviesLoading,
-    error: moviesError,
-    reFetch: refetchMovies
-  } = useFetch(() => fetchPopularMovies({ query: searchQuery }), false);
+  const handleSearch = async () => {
+    if (!searchQuery.trim()) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const results = await fetchPopularMovies({ query: searchQuery.trim() });
+      setMovies(Array.isArray(results) ? results : []);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to load movies");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <View className="flex-1 bg-primary">
-      <Image
-        source={images.bg}
-        className="flex-1 absolute w-full z-0"
-        resizeMode="cover"
-      />
+      <Image source={images.bg} className="flex-1 absolute w-full z-0" resizeMode="cover" />
       <FlatList
-        data={Array.isArray(movies) ? movies : []}
+        data={movies}
         renderItem={({ item }) => <MovieCard {...item} />}
-        keyExtractor={(item) =>
-          item.id?.toString?.() ??
-          item.slug ??
-          item.title ??
-          Math.random().toString()
-        }
+        keyExtractor={(item) => item.id.toString()}
         className="px-5"
         numColumns={3}
-        columnWrapperStyle={{
-          justifyContent: "center",
-          gap: 16,
-          marginVertical: 16,
-        }}
-        contentContainerStyle={{
-          paddingBottom: 100,
-        }}
+        columnWrapperStyle={{ justifyContent: "flex-start", gap: 16, marginVertical: 16 }}
+        contentContainerStyle={{ paddingBottom: 100 }}
         ListHeaderComponent={
           <>
             <View className="w-full flex-row justify-center mt-20 items-center">
-              <Image source={icons.logo} className="w-12 h-10" />
+              <Image source={icons.logo} className="w-20 h-20" />
             </View>
+
             <View className="my-5">
               <SearchBar
                 placeholder="Search movies..."
                 value={searchQuery}
                 onChangeText={setSearchQuery}
-                onSubmitEditing={refetchMovies}
+                onSubmitEditing={handleSearch}
               />
             </View>
 
-            {moviesLoading && (
-              <ActivityIndicator size="large" color="#0000ff" className="my-3"/>
+            {loading && (
+              <ActivityIndicator size="large" color="#AB8BFF" className="my-3" />
             )}
 
-            {moviesError && (
-              <Text className="text-red-500 px-5 my-3">
-                Error: {moviesError?.message || "Failed to load movies"}
+            {error && (
+              <Text className="text-red-500 px-5 my-3">Error: {error}</Text>
+            )}
+
+            {!loading && !error && searchQuery.trim() !== "" && movies.length > 0 && (
+              <Text className="text-xl text-white font-bold mb-2">
+                Results for <Text className="text-accent">{searchQuery}</Text>
               </Text>
             )}
 
-            {!moviesLoading && !moviesError && searchQuery.trim() && movies?.length > 0 && (
-              <Text className="text-xl text-white font-bold">
-                Search Results for{' '}
-                 <Text className="text-accent">{searchQuery}</Text>
+            {!loading && !error && searchQuery.trim() !== "" && movies.length === 0 && (
+              <Text className="text-light-200 text-center mt-10">
+                No results found for "{searchQuery}"
               </Text>
             )}
-
           </>
         }
       />
@@ -81,4 +78,4 @@ const search = () => {
   );
 };
 
-export default search;
+export default Search;
