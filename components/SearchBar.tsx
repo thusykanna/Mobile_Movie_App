@@ -5,10 +5,12 @@ import { icons } from "@/constants/icons";
 interface Props {
   placeholder?: string;
   onPress?: () => void;
+  value?: string;
+  onChangeText?: (text: string) => void;
+  onSubmitEditing?: () => void;
 }
 
-const SearchBar: React.FC<Props> = ({ placeholder, onPress }) => {     //Code to be reconsidered
-  const [query, setQuery] = React.useState("");
+const SearchBar: React.FC<Props> = ({ placeholder, onPress, value, onChangeText, onSubmitEditing }) => {
   const inputRef = React.useRef<TextInput>(null);
   return (
     <Pressable
@@ -31,10 +33,12 @@ const SearchBar: React.FC<Props> = ({ placeholder, onPress }) => {     //Code to
         ref={inputRef}
         placeholder={placeholder}
         placeholderTextColor="#a8b5db"
-        value={query}
-        onChangeText={setQuery}
+        value={value}
+        onChangeText={onChangeText}
+        onSubmitEditing={onSubmitEditing}
         className="flex-1 ml-2 text-white"
         returnKeyType="search"
+        editable={!onPress}
       />
     </Pressable>
   );
