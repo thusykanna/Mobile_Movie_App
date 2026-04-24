@@ -1,5 +1,5 @@
 import { View, Text, Image, FlatList, ActivityIndicator } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { images } from "@/constants/images";
 import MovieCard from "@/components/MovieCard";
 import { fetchPopularMovies } from "@/services/api";
@@ -11,20 +11,30 @@ const Search = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [hasSearched, setHasSearched] = useState(false);
 
-  const handleSearch = async () => {
-    if (!searchQuery.trim()) return;
-    setLoading(true);
-    setError(null);
-    try {
-      const results = await fetchPopularMovies({ query: searchQuery.trim() });
-      setMovies(Array.isArray(results) ? results : []);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load movies");
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    const trimmed = searchQuery.trim();
+    if (!trimmed) {
+      setMovies([]);
+      setHasSearched(false);
+      return;
     }
-  };
+    const timer = setTimeout(async () => {
+      setHasSearched(true);
+      setLoading(true);
+      setError(null);
+      try {
+        const results = await fetchPopularMovies({ query: trimmed });
+        setMovies(Array.isArray(results) ? results : []);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to load movies");
+      } finally {
+        setLoading(false);
+      }
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   return (
     <View className="flex-1 bg-primary">
@@ -48,7 +58,6 @@ const Search = () => {
                 placeholder="Search movies..."
                 value={searchQuery}
                 onChangeText={setSearchQuery}
-                onSubmitEditing={handleSearch}
               />
             </View>
 
@@ -66,7 +75,7 @@ const Search = () => {
               </Text>
             )}
 
-            {!loading && !error && searchQuery.trim() !== "" && movies.length === 0 && (
+            {!loading && !error && hasSearched && movies.length === 0 && (
               <Text className="text-light-200 text-center mt-10">
                 No results found for "{searchQuery}"
               </Text>
