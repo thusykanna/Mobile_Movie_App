@@ -2,7 +2,7 @@ import { View, Text, Image, ScrollView, TouchableOpacity, ActivityIndicator } fr
 import React, { useEffect, useState } from 'react'
 import { useLocalSearchParams, router } from 'expo-router'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { Feather } from '@expo/vector-icons'
+import { Feather, Ionicons } from '@expo/vector-icons'
 import useFetch from '@/services/useFetch'
 import { fetchMovieDetails } from '@/services/api'
 
@@ -80,7 +80,7 @@ const MovieDetailsScreen = () => {
           onPress={toggleSave}
           className="absolute top-14 right-5 p-2 rounded-full bg-dark-100"
         >
-          <Feather name="bookmark" size={22} color={isSaved ? '#AB8BFF' : '#A8B5DB'} />
+          <Ionicons name={isSaved ? 'bookmark' : 'bookmark-outline'} size={22} color={isSaved ? '#ffffff' : '#A8B5DB'} />
         </TouchableOpacity>
 
         <View className="px-5 pt-5">
